@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { DateTime } from "luxon";
 import {
   differenceFromVietnam,
@@ -15,7 +16,7 @@ type TimeCardProps = {
   featured?: boolean;
 };
 
-export function TimeCard({
+function TimeCardComponent({
   title,
   shortLabel,
   city,
@@ -77,3 +78,5 @@ export function TimeCard({
     </article>
   );
 }
+
+export const TimeCard = memo(TimeCardComponent);

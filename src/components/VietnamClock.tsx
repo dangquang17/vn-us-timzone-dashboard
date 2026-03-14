@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { DateTime } from "luxon";
 import { TimeCard } from "./TimeCard";
 import { VIETNAM_TIMEZONE } from "../utils/timezone";
@@ -6,7 +7,7 @@ type VietnamClockProps = {
   now: DateTime;
 };
 
-export function VietnamClock({ now }: VietnamClockProps) {
+function VietnamClockComponent({ now }: VietnamClockProps) {
   return (
     <TimeCard
       title={VIETNAM_TIMEZONE.name}
@@ -18,3 +19,5 @@ export function VietnamClock({ now }: VietnamClockProps) {
     />
   );
 }
+
+export const VietnamClock = memo(VietnamClockComponent);

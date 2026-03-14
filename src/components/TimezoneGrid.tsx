@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { DateTime } from "luxon";
 import { TimeCard } from "./TimeCard";
 import { TimezoneItem, toZone } from "../utils/timezone";
@@ -8,7 +9,7 @@ type TimezoneGridProps = {
   vietnamNow: DateTime;
 };
 
-export function TimezoneGrid({
+function TimezoneGridComponent({
   items,
   now,
   vietnamNow,
@@ -28,3 +29,5 @@ export function TimezoneGrid({
     </div>
   );
 }
+
+export const TimezoneGrid = memo(TimezoneGridComponent);

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { ThemeMode } from "../hooks/useTheme";
 
 type ThemeToggleProps = {
@@ -12,7 +13,7 @@ const options: Array<{ value: ThemeMode; label: string }> = [
   { value: "system", label: "System" },
 ];
 
-export function ThemeToggle({
+function ThemeToggleComponent({
   mode,
   resolvedTheme,
   onChange,
@@ -53,3 +54,5 @@ export function ThemeToggle({
     </div>
   );
 }
+
+export const ThemeToggle = memo(ThemeToggleComponent);
