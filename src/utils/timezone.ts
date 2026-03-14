@@ -84,3 +84,13 @@ export function differenceFromVietnam(now: DateTime, vietnamNow: DateTime) {
 
   return `${absoluteHours} ${unit} ${direction} Vietnam`;
 }
+
+// Formats a DateTime for use with an HTML datetime-local input.
+export function toDateTimeLocalValue(now: DateTime) {
+  return now.toFormat("yyyy-LL-dd'T'HH:mm");
+}
+
+// Parses a datetime-local value as Vietnam local time.
+export function parseVietnamLocalTime(value: string) {
+  return DateTime.fromISO(value, { zone: VIETNAM_TIMEZONE.zone });
+}
