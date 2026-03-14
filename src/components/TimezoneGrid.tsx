@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { DateTime } from "luxon";
 import { TimeCard } from "./TimeCard";
+import { RevealOnScroll } from "./RevealOnScroll";
 import { TimezoneItem, toZone } from "../utils/timezone";
 
 type TimezoneGridProps = {
@@ -16,15 +17,16 @@ function TimezoneGridComponent({
 }: TimezoneGridProps) {
   return (
     <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-      {items.map((item) => (
-        <TimeCard
-          key={item.zone}
-          title={item.name}
-          shortLabel={item.shortLabel}
-          city={item.city}
-          now={toZone(now, item.zone)}
-          vietnamNow={vietnamNow}
-        />
+      {items.map((item, index) => (
+        <RevealOnScroll key={item.zone} delayMs={index * 45} speed="fast">
+          <TimeCard
+            title={item.name}
+            shortLabel={item.shortLabel}
+            city={item.city}
+            now={toZone(now, item.zone)}
+            vietnamNow={vietnamNow}
+          />
+        </RevealOnScroll>
       ))}
     </div>
   );
