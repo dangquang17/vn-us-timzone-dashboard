@@ -4,6 +4,7 @@
 
 :root {
   font-family: "Space Grotesk", system-ui, sans-serif;
+  --theme-browser: #fffaf2;
   --bg-base: #fffaf2;
   --bg-elevated: rgba(255, 255, 255, 0.68);
   --bg-card: rgba(255, 255, 255, 0.74);
@@ -26,6 +27,7 @@
 }
 
 :root[data-theme="dark"] {
+  --theme-browser: #04101d;
   --bg-base: #06101d;
   --bg-elevated: rgba(7, 17, 31, 0.78);
   --bg-card: rgba(9, 21, 39, 0.78);

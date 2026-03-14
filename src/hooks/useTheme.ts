@@ -1,55 +1,47 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  createElement,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {
+  ResolvedTheme,
+  THEME_STORAGE_KEY,
+  ThemeMode,
+  applyThemeToDocument,
+  getSystemTheme,
+  readStoredTheme,
+  resolveTheme,
+} from "../utils/theme";
 
-export type ThemeMode = "light" | "dark" | "system";
+export type { ThemeMode } from "../utils/theme";
 
-const STORAGE_KEY = "vn-us-clock-theme";
+type ThemeContextValue = {
+  mode: ThemeMode;
+  resolvedTheme: ResolvedTheme;
+  setMode: (mode: ThemeMode) => void;
+};
 
-function getSystemTheme() {
-  if (typeof window === "undefined") {
-    return "light";
-  }
+type ThemeProviderProps = {
+  children: ReactNode;
+};
 
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
+const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-function getStoredTheme(): ThemeMode {
-  if (typeof window === "undefined") {
-    return "system";
-  }
-
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-
-  if (stored === "light" || stored === "dark" || stored === "system") {
-    return stored;
-  }
-
-  return "system";
-}
-
-function applyResolvedTheme(resolvedTheme: "light" | "dark") {
-  const root = document.documentElement;
-  const themeColor = resolvedTheme === "dark" ? "#04101d" : "#fffaf2";
-  const themeMeta = document.querySelector('meta[name="theme-color"]');
-
-  root.dataset.theme = resolvedTheme;
-  root.style.colorScheme = resolvedTheme;
-
-  if (themeMeta) {
-    themeMeta.setAttribute("content", themeColor);
-  }
-}
-
-export function useTheme() {
-  const [mode, setMode] = useState<ThemeMode>(() => getStoredTheme());
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">(
+// Creates the theme state and keeps it synced with localStorage, system preference, and the DOM.
+function useThemeController(): ThemeContextValue {
+  const [mode, setMode] = useState<ThemeMode>(() => readStoredTheme());
+  const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(
     () => getSystemTheme(),
   );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
+    // Re-reads the browser preference when the OS theme changes or the tab regains focus.
     const syncSystemTheme = () => {
       setSystemTheme(mediaQuery.matches ? "dark" : "light");
     };
@@ -78,18 +70,19 @@ export function useTheme() {
   }, []);
 
   const resolvedTheme = useMemo(
-    () => (mode === "system" ? systemTheme : mode),
+    () => resolveTheme(mode, systemTheme),
     [mode, systemTheme],
   );
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEY, mode);
-    applyResolvedTheme(resolvedTheme);
+    window.localStorage.setItem(THEME_STORAGE_KEY, mode);
+    applyThemeToDocument(resolvedTheme);
   }, [mode, resolvedTheme]);
 
   useEffect(() => {
+    // Mirrors theme changes coming from another browser tab.
     const syncStoredMode = () => {
-      setMode(getStoredTheme());
+      setMode(readStoredTheme());
     };
 
     window.addEventListener("storage", syncStoredMode);
@@ -101,4 +94,22 @@ export function useTheme() {
     resolvedTheme,
     setMode,
   };
+}
+
+// Provides a single shared theme state for the entire application tree.
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  const value = useThemeController();
+
+  return createElement(ThemeContext.Provider, { value }, children);
+}
+
+// Reads the shared theme state created by ThemeProvider.
+export function useTheme() {
+  const context = useContext(ThemeContext);
+
+  if (!context) {
+    throw new Error("useTheme must be used within ThemeProvider.");
+  }
+
+  return context;
 }

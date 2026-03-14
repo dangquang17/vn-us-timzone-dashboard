@@ -1,9 +1,15 @@
 import { useTheme } from "./hooks/useTheme";
+import { ThemeProvider } from "./hooks/useTheme";
 import { TimezoneDashboard } from "./components/TimezoneDashboard";
-import { AppearanceSwitch } from "./components/AppearanceSwitch";
+import { ThemeToggle } from "./components/ThemeToggle";
 import packageJson from "../package.json";
 
-function App() {
+const APP_TITLE = "Vietnam & US Timezone Dashboard";
+const APP_DESCRIPTION =
+  "A real-time dashboard for Vietnam and the six major United States time zones, updating every second with local time, date, and timezone offset.";
+
+// Renders the main dashboard page.
+function DashboardPage() {
   const { mode, resolvedTheme, setMode } = useTheme();
   const appVersion = packageJson.version;
 
@@ -17,12 +23,10 @@ function App() {
                 Live world clock
               </p>
               <h1 className="mt-3 font-display text-4xl font-bold tracking-tight sm:text-5xl">
-                Vietnam & US Timezone Dashboard
+                {APP_TITLE}
               </h1>
               <p className="mt-4 max-w-xl text-base leading-7 text-token-subtle">
-                A real-time dashboard for Vietnam and the six major United
-                States time zones, updating every second with local time, date,
-                and timezone offset.
+                {APP_DESCRIPTION}
               </p>
               <div className="mt-5 inline-flex items-center rounded-full bg-black/5 px-3 py-1 font-mono text-xs text-token-muted">
                 Version {appVersion}
@@ -30,7 +34,7 @@ function App() {
             </div>
 
             <div className="lg:pt-1">
-              <AppearanceSwitch
+              <ThemeToggle
                 mode={mode}
                 resolvedTheme={resolvedTheme}
                 onChange={setMode}
@@ -42,6 +46,15 @@ function App() {
         <TimezoneDashboard />
       </div>
     </main>
+  );
+}
+
+// Keeps the provider at the app root and renders the dashboard immediately.
+function App() {
+  return (
+    <ThemeProvider>
+      <DashboardPage />
+    </ThemeProvider>
   );
 }
 
