@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: "Space Grotesk", system-ui, sans-serif;
+  --bg-base: #fffaf2;
+  --bg-elevated: rgba(255, 255, 255, 0.68);
+  --bg-card: rgba(255, 255, 255, 0.74);
+  --bg-card-strong: #08111f;
+  --border-soft: rgba(255, 255, 255, 0.72);
+  --border-card: rgba(148, 163, 184, 0.24);
+  --ring-accent: rgba(251, 146, 60, 0.22);
+  --text-main: #08111f;
+  --text-subtle: #475569;
+  --text-muted: #334155;
+  --text-on-strong: #fff7ed;
+  --badge-soft: rgba(8, 17, 31, 0.06);
+  --separator: linear-gradient(90deg, rgba(148, 163, 184, 0.42), transparent);
+  --app-gradient:
+    linear-gradient(180deg, #fffaf2 0%, #fffdf8 40%, #f9fafb 100%);
+  --app-mesh:
+    radial-gradient(circle at top left, rgba(249, 115, 22, 0.24), transparent 28%),
+    radial-gradient(circle at 85% 20%, rgba(251, 113, 133, 0.18), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.16), transparent 32%);
+}
+
+:root[data-theme="dark"] {
+  --bg-base: #06101d;
+  --bg-elevated: rgba(7, 17, 31, 0.78);
+  --bg-card: rgba(9, 21, 39, 0.78);
+  --bg-card-strong: #fff7ed;
+  --border-soft: rgba(125, 148, 178, 0.22);
+  --border-card: rgba(125, 148, 178, 0.18);
+  --ring-accent: rgba(251, 146, 60, 0.18);
+  --text-main: #eff6ff;
+  --text-subtle: #bfd0e8;
+  --text-muted: #d5e1f1;
+  --text-on-strong: #08111f;
+  --badge-soft: rgba(255, 255, 255, 0.08);
+  --separator: linear-gradient(90deg, rgba(125, 148, 178, 0.42), transparent);
+  --app-gradient:
+    linear-gradient(180deg, #04101d 0%, #071425 48%, #0a1628 100%);
+  --app-mesh:
+    radial-gradient(circle at top left, rgba(251, 146, 60, 0.18), transparent 28%),
+    radial-gradient(circle at 85% 18%, rgba(251, 113, 133, 0.16), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.14), transparent 32%);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--app-gradient);
+  color: var(--text-main);
+  transition:
+    background 0.45s ease,
+    color 0.45s ease;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  background-image: var(--app-mesh);
+}
+
+.panel-surface {
+  border: 1px solid var(--border-card);
+  background: var(--bg-card);
+}
+
+.featured-panel {
+  border: 1px solid var(--border-soft);
+  background: var(--bg-elevated);
+  box-shadow:
+    0 0 0 1px var(--ring-accent),
+    0 24px 60px rgba(8, 17, 31, 0.14);
+}
+
+.badge-strong {
+  background: var(--bg-card-strong);
+  color: var(--text-on-strong);
+}
+
+.badge-soft {
+  background: var(--badge-soft);
+  color: var(--text-muted);
+}
+
+.separator-line {
+  background: var(--separator);
+}
+
+.text-token-text {
+  color: var(--text-main);
+}
+
+.text-token-subtle {
+  color: var(--text-subtle);
+}
+
+.text-token-muted {
+  color: var(--text-muted);
+}
+
+.text-token-strong-contrast {
+  color: var(--text-on-strong);
+}
+
+.bg-token-strong {
+  background: var(--bg-card-strong);
+}
+
+::selection {
+  background: rgba(249, 115, 22, 0.18);
+}
